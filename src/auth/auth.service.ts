@@ -8,26 +8,8 @@ export class AuthService {
   constructor(private readonly prisma: PrismaService) {}
 
   async register(dto: RegisterDto) {
-    if (dto.password !== dto.confirmPassword) {
-      throw new BadRequestException({
-        message: 'Validation failed',
-        errors: {
-          confirmPassword: ['confirmPassword must match password'],
-        },
-      });
-    }
-
-    const userConflictErrors = await this.getUserConflictErrors(
-      dto.email,
-      dto.username,
-    );
-
-    if (userConflictErrors !== null) {
-      throw new BadRequestException({
-        message: 'Validation failed',
-        errors: userConflictErrors,
-      });
-    }
+    this.validatePassword(dto.password, dto.confirmPassword);
+    await this.validateUserDoesNotExist(dto.email, dto.username);
 
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
@@ -35,7 +17,7 @@ export class AuthService {
       data: {
         email: dto.email,
         username: dto.username,
-        passwordHash,
+        passwordHash: passwordHash,
       },
     });
 
@@ -44,12 +26,18 @@ export class AuthService {
     return safeUser;
   }
 
-  private async getUserConflictErrors(
-    email: string,
-    username: string,
-  ): Promise<Record<string, string[]> | null> {
-    const errors: Record<string, string[]> = {};
+  private validatePassword(password: string, confirmPassword: string) {
+    if (password !== confirmPassword) {
+      throw new BadRequestException({
+        message: 'Validation failed',
+        errors: {
+          confirmPassword: ['confirmPassword must match password'],
+        },
+      });
+    }
+  }
 
+  private async validateUserDoesNotExist(email: string, username: string) {
     const existingUser = await this.prisma.user.findFirst({
       where: {
         OR: [{ email }, { username }],
@@ -61,13 +49,21 @@ export class AuthService {
     }
 
     if (existingUser.email === email) {
-      errors.email = ['Email is already in use'];
+      throw new BadRequestException({
+        message: 'Validation failed',
+        errors: {
+          email: ['Email is already in use'],
+        },
+      });
     }
 
     if (existingUser.username === username) {
-      errors.username = ['Username is already in use'];
+      throw new BadRequestException({
+        message: 'Validation failed',
+        errors: {
+          username: ['Username is already in use'],
+        },
+      });
     }
-
-    return errors;
   }
 }

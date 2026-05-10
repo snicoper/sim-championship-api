@@ -1,9 +1,8 @@
-export interface UserResponse {
+export interface RegisterResponse {
   id: string;
   email: string;
   username: string;
   isActive: boolean;
-  refreshTokenHash: string | null;
   createdAt: Date;
   updatedAt: Date;
 }

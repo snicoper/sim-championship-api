@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { UserResponse } from '../contracts/user.response';
 import { RegisterRequest } from './register.request';
+import { RegisterResponse } from './resgister.response';
 
 @Injectable()
 export class RegisterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async register(dto: RegisterRequest): Promise<UserResponse> {
+  async register(dto: RegisterRequest): Promise<RegisterResponse> {
     const normalizedEmail = dto.email.trim().toLowerCase();
     const normalizedUsername = dto.username.toLocaleLowerCase().trim();
 

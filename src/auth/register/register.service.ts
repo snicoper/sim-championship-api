@@ -1,13 +1,14 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
-import { RegisterDto } from './register.dto';
+import { UserResponse } from '../contracts/user.response';
+import { RegisterRequest } from './register.request';
 
 @Injectable()
 export class RegisterService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async register(dto: RegisterDto) {
+  async register(dto: RegisterRequest): Promise<UserResponse> {
     const normalizedEmail = dto.email.trim().toLowerCase();
     const normalizedUsername = dto.username.toLocaleLowerCase().trim();
 
@@ -28,7 +29,7 @@ export class RegisterService {
     return safeUser;
   }
 
-  private validatePassword(password: string, confirmPassword: string) {
+  private validatePassword(password: string, confirmPassword: string): void {
     if (password !== confirmPassword) {
       throw new BadRequestException({
         message: 'Validation failed',
@@ -39,7 +40,10 @@ export class RegisterService {
     }
   }
 
-  private async validateUserDoesNotExist(email: string, username: string) {
+  private async validateUserDoesNotExist(
+    email: string,
+    username: string,
+  ): Promise<void | null> {
     const errors: Record<string, string[]> = {};
 
     const existingUser = await this.prisma.user.findFirst({

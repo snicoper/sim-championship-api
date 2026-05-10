@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { TokenResponse } from '../contracts/token.response';
 import { TokenService } from '../token.service';
 import { LoginRequest } from './login.request';
 
@@ -11,7 +12,7 @@ export class LoginService {
     private readonly authService: TokenService,
   ) {}
 
-  async login(dto: LoginRequest) {
+  async login(dto: LoginRequest): Promise<TokenResponse> {
     const normalizedEmail = dto.email.trim().toLowerCase();
 
     const user = await this.prisma.user.findUnique({
@@ -21,7 +22,7 @@ export class LoginService {
     });
 
     if (!user) {
-      return new UnauthorizedException({
+      throw new UnauthorizedException({
         message: 'Invalid credentials',
       });
     }
@@ -32,7 +33,7 @@ export class LoginService {
     );
 
     if (!isPasswordValid) {
-      return new UnauthorizedException({
+      throw new UnauthorizedException({
         message: 'Invalid credentials',
       });
     }

@@ -3,6 +3,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { TokenResponse } from '../contracts/token.response';
 import { TokenService } from '../token.service';
+import { RefreshTokenRequest } from './refresh-token.request';
 
 @Injectable()
 export class RefreshTokenService {
@@ -12,7 +13,7 @@ export class RefreshTokenService {
   ) {}
 
   async refreshToken(
-    refreshTokenRequest: string,
+    refreshTokenRequest: RefreshTokenRequest,
     userId: string,
   ): Promise<TokenResponse> {
     const user = await this.prisma.user.findUnique({
@@ -24,7 +25,7 @@ export class RefreshTokenService {
     }
 
     const isValidRefreshToken = await bcrypt.compare(
-      refreshTokenRequest,
+      refreshTokenRequest.refreshToken,
       user.refreshTokenHash as string,
     );
 

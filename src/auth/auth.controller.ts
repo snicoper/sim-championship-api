@@ -9,13 +9,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { JwtPayload } from './contracts/jwt-payload.contract';
+import { TokenResponse } from './contracts/token.response';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { LoginRequest } from './login/login.request';
 import { LoginService } from './login/login.service';
+import { MeResponse } from './me/me.response';
 import { MeService } from './me/me.service';
 import { RefreshTokenRequest } from './refresh-token/refresh-token.request';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
-import { RegisterDto } from './register/register.dto';
+import { RegisterRequest } from './register/register.request';
 import { RegisterService } from './register/register.service';
 
 @Controller('auth')
@@ -29,18 +31,18 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  me(@Req() req: Request & { user: JwtPayload }) {
+  me(@Req() req: Request & { user: JwtPayload }): Promise<MeResponse> {
     return this.meService.getMe(req.user.sub);
   }
 
   @Post('register')
-  register(@Body() dto: RegisterDto) {
+  register(@Body() dto: RegisterRequest): Promise<MeResponse> {
     return this.registerService.register(dto);
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: LoginRequest) {
+  login(@Body() dto: LoginRequest): Promise<TokenResponse> {
     return this.loginService.login(dto);
   }
 
@@ -49,10 +51,7 @@ export class AuthController {
   refresh(
     @Req() req: Request & { user: JwtPayload },
     @Body() dto: RefreshTokenRequest,
-  ) {
-    return this.refreshTokenService.refreshToken(
-      dto.refreshToken,
-      req.user.sub,
-    );
+  ): Promise<TokenResponse> {
+    return this.refreshTokenService.refreshToken(dto, req.user.sub);
   }
 }

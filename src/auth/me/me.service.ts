@@ -6,7 +6,7 @@ import { MeResponse } from './me.response';
 export class MeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getMe(userId: string) {
+  async getMe(userId: string): Promise<MeResponse> {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userId,

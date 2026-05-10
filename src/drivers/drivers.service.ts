@@ -8,11 +8,11 @@ export class DriversService {
     { id: 3, name: 'Fernando Alonso', nationality: 'Spain' },
   ];
 
-  findAll() {
+  findAll(): any[] {
     return this.drivers;
   }
 
-  findOne(id: number) {
+  findOne(id: number): any {
     return this.drivers.find((driver) => driver.id === id);
   }
 }

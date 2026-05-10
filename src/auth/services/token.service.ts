@@ -32,6 +32,13 @@ export class TokenService {
     };
   }
 
+  async clearRefreshToken(userId: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { refreshTokenHash: null },
+    });
+  }
+
   private async createAccessToken(user: User): Promise<string> {
     const payload = {
       sub: user.id,

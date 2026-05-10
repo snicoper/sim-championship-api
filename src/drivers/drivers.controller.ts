@@ -6,12 +6,12 @@ export class DriversController {
   constructor(private readonly driversService: DriversService) {}
 
   @Get()
-  findAll() {
+  findAll(): any[] {
     return this.driversService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: string): any {
     return this.driversService.findOne(Number(id));
   }
 }

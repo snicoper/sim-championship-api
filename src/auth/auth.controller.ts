@@ -13,6 +13,7 @@ import { TokenResponse } from './contracts/token.response';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
 import { LoginRequest } from './login/login.request';
 import { LoginService } from './login/login.service';
+import { LogoutService } from './logout/logout.service';
 import { MeResponse } from './me/me.response';
 import { MeService } from './me/me.service';
 import { RefreshTokenRequest } from './refresh-token/refresh-token.request';
@@ -27,6 +28,7 @@ export class AuthController {
     private readonly loginService: LoginService,
     private readonly meService: MeService,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly logoutService: LogoutService,
   ) {}
 
   @Get('me')
@@ -53,5 +55,12 @@ export class AuthController {
     @Body() dto: RefreshTokenRequest,
   ): Promise<TokenResponse> {
     return this.refreshTokenService.refreshToken(dto, req.user.sub);
+  }
+
+  @Post('logout')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async logout(@Req() req: Request & { user: JwtPayload }): Promise<void> {
+    await this.logoutService.logout(req.user.sub);
   }
 }

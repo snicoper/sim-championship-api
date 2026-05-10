@@ -7,8 +7,9 @@ import { LoginService } from './login/login.service';
 import { MeService } from './me/me.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { RegisterService } from './register/register.service';
-import { JwtStrategy } from './strategies/jwt.strategy';
 import { TokenService } from './services/token.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
+import { LogoutService } from './logout/logout.service';
 
 const jwtExpiresIn =
   `${AppConfig.jwt.expiresInMinutes}m` as SignOptions['expiresIn'];
@@ -30,6 +31,7 @@ const jwtExpiresIn =
     MeService,
     RefreshTokenService,
     TokenService,
+    LogoutService,
   ],
 })
 export class AuthModule {}

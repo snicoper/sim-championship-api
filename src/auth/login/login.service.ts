@@ -3,9 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { AppConfig } from '../../common/config/app.config';
-import { JwtPayload } from '../interfaces/jwt-payload.interface';
-import { LoginResult } from '../interfaces/login-result.interface';
-import { LoginDto } from './login.dto';
+import { JwtPayload } from '../contracts/jwt-payload.contract';
+import { LoginRequest } from './login.request';
+import { LoginResponse } from './login.response';
 
 @Injectable()
 export class LoginService {
@@ -14,7 +14,7 @@ export class LoginService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginRequest) {
     const normalizedEmail = dto.email.trim().toLowerCase();
 
     const user = await this.prisma.user.findUnique({
@@ -48,7 +48,7 @@ export class LoginService {
 
     const accessToken = await this.jwtService.signAsync(payload);
     const expiresIn = AppConfig.jwt.expiresInMinutes * 60;
-    const loginResult: LoginResult = {
+    const loginResult: LoginResponse = {
       accessToken,
       expiresIn,
     };

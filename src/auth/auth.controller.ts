@@ -8,9 +8,9 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { JwtPayload } from './contracts/jwt-payload.contract';
 import { JwtAuthGuard } from './guards/jwt-auth/jwt-auth.guard';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
-import { LoginDto } from './login/login.dto';
+import { LoginRequest } from './login/login.request';
 import { LoginService } from './login/login.service';
 import { MeService } from './me/me.service';
 import { RegisterDto } from './register/register.dto';
@@ -37,7 +37,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  login(@Body() dto: LoginDto) {
+  login(@Body() dto: LoginRequest) {
     return this.loginService.login(dto);
   }
 }

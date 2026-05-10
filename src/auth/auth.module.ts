@@ -6,6 +6,7 @@ import { AuthController } from './auth.controller';
 import { LoginService } from './login/login.service';
 import { RegisterService } from './register/register.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { MeService } from './me/me.service';
 
 const jwtExpiresIn =
   `${AppConfig.jwt.expiresInMinutes}m` as SignOptions['expiresIn'];
@@ -20,6 +21,6 @@ const jwtExpiresIn =
     }),
   ],
   controllers: [AuthController],
-  providers: [RegisterService, LoginService, JwtStrategy],
+  providers: [RegisterService, LoginService, JwtStrategy, MeService],
 })
 export class AuthModule {}

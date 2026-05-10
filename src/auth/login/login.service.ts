@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { TokenResponse } from '../contracts/token.response';
-import { TokenService } from '../token.service';
 import { LoginRequest } from './login.request';
+import { TokenService } from '../services/token.service';
 
 @Injectable()
 export class LoginService {

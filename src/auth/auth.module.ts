@@ -8,7 +8,7 @@ import { MeService } from './me/me.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { RegisterService } from './register/register.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { TokenService } from './token.service';
+import { TokenService } from './services/token.service';
 
 const jwtExpiresIn =
   `${AppConfig.jwt.expiresInMinutes}m` as SignOptions['expiresIn'];

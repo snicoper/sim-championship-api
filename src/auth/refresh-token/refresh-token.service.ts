@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { TokenResponse } from '../contracts/token.response';
-import { TokenService } from '../token.service';
 import { RefreshTokenRequest } from './refresh-token.request';
+import { TokenService } from '../services/token.service';
 
 @Injectable()
 export class RefreshTokenService {
@@ -26,7 +26,7 @@ export class RefreshTokenService {
 
     const isValidRefreshToken = await bcrypt.compare(
       refreshTokenRequest.refreshToken,
-      user.refreshTokenHash as string,
+      user.refreshTokenHash,
     );
 
     if (!isValidRefreshToken) {

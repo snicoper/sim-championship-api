@@ -3,10 +3,10 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { randomBytes } from 'crypto';
-import { PrismaService } from '../../prisma/prisma.service';
-import { AppConfig } from '../common/config/app.config';
-import { RefreshToken } from './contracts/refresh-token.contract';
-import { TokenResponse } from './contracts/token.response';
+import { PrismaService } from '../../../prisma/prisma.service';
+import { AppConfig } from '../../common/config/app.config';
+import { RefreshToken } from '../contracts/refresh-token.contract';
+import { TokenResponse } from '../contracts/token.response';
 
 @Injectable()
 export class TokenService {

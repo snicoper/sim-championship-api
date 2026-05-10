@@ -8,6 +8,13 @@ http:
   url: "{{base-url}}/auth/logout"
   auth: inherit
 
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setEnvVar('accessToken', '')
+        bru.setEnvVar('refreshToken', '')
+
 settings:
   encodeUrl: true
   timeout: 0

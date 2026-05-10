@@ -2,6 +2,7 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { type ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
+import { AppConfig } from './common/config/app.config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -28,6 +29,6 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(AppConfig.port ?? 3000);
 }
 void bootstrap();

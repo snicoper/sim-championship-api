@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
+import { AppConfig } from '../../common/config/app.config';
 import { JwtPayload } from '../interfaces/jwt-payload.interface';
 import { LoginResult } from '../interfaces/login-result.interface';
 import { LoginDto } from './login.dto';
@@ -46,7 +47,7 @@ export class LoginService {
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
-    const expiresIn = Number(process.env.JWT_EXPIRES_IN_MINUTES) * 60;
+    const expiresIn = AppConfig.jwt.expiresInMinutes * 60;
     const loginResult: LoginResult = {
       accessToken,
       expiresIn,

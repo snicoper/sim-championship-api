@@ -1,9 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { TokenResponse } from '../contracts/token.response';
-import { LoginRequest } from './login.request';
 import { TokenService } from '../services/token.service';
+import { LoginRequest } from './login.request';
 
 @Injectable()
 export class LoginService {
@@ -22,8 +22,9 @@ export class LoginService {
     });
 
     if (!user) {
-      throw new UnauthorizedException({
-        message: 'Invalid credentials',
+      throw new ConflictException({
+        code: 'invalid_credentials',
+        detail: 'Email or password is invalid',
       });
     }
 
@@ -33,8 +34,9 @@ export class LoginService {
     );
 
     if (!isPasswordValid) {
-      throw new UnauthorizedException({
-        message: 'Invalid credentials',
+      throw new ConflictException({
+        code: 'invalid_credentials',
+        detail: 'Email or password is invalid',
       });
     }
 

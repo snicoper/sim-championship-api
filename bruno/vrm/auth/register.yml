@@ -10,10 +10,10 @@ http:
     type: json
     data: |-
       {
-        "email": "{{registerEmail}}",
-        "username": "{{registerUsername}}",
-        "password": "Password123!",
-        "confirmPassword": "Password123!"
+        "email": "{{registerEmail}}-",
+        "username": "{{registerUsername}}-",
+        "password": "1",
+        "confirmPassword": "!"
       }
   auth: inherit
 
@@ -23,8 +23,8 @@ runtime:
       code: |-
         const timestamp = Date.now();
 
-        bru.setVar('registerEmail', `test-${timestamp}@example.com`);
-        bru.setVar('registerUsername', `test-${timestamp}`);
+        bru.setVar('registerEmail', `test${timestamp}@example.com`);
+        bru.setVar('registerUsername', `test${timestamp}`);
     - type: tests
       code: |-
         const data = res.getBody();

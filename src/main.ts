@@ -1,40 +1,19 @@
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { type ValidationError } from 'class-validator';
 import { AppModule } from './app.module';
 import { AppConfig } from './common/config/app.config';
+import { GlobalExceptionFilter } from './common/filters/global-exception.filter';
+import { createValidationPipe } from './common/pipes/create-validation.pipe';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
-      exceptionFactory: (
-        validationError: ValidationError[] = [],
-      ): BadRequestException => {
-        const errors = validationError.reduce<Record<string, string[]>>(
-          (acc, error) => {
-            acc[error.property] = Object.values(error.constraints ?? {});
+  app.useGlobalPipes(createValidationPipe());
+  app.useGlobalFilters(new GlobalExceptionFilter());
 
-            return acc;
-          },
-          {},
-        );
-
-        return new BadRequestException({
-          title: 'Bad Request',
-          detail: 'Validation failed',
-          status: 400,
-          type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
-          code: 'validation_failed',
-          errors,
-        });
-      },
-    }),
-  );
+  app.enableCors({
+    origin: AppConfig.corsOrigin,
+    credentials: true,
+  });
 
   await app.listen(AppConfig.port ?? 3000);
 }

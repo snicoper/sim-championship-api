@@ -1,15 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../../prisma/prisma.service';
+import { MailService } from '../../../core/mail/mail.service';
+import { UserTokenService } from '../core/services/user-token.service';
 import { RegisterRequest } from './register.request';
 import { RegisterResponse } from './register.response';
-import { UserTokenService } from '../core/services/user-token.service';
 
 @Injectable()
 export class RegisterService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userTokenService: UserTokenService,
+    private readonly mailService: MailService,
   ) {}
 
   async register(dto: RegisterRequest): Promise<RegisterResponse> {
@@ -19,17 +22,9 @@ export class RegisterService {
     await this.validateUserDoesNotExist(normalizedEmail);
 
     const passwordHash = await bcrypt.hash(dto.password, 10);
-    const user = await this.prisma.user.create({
-      data: {
-        email: normalizedEmail,
-        passwordHash: passwordHash,
-      },
-    });
+    const user = await this.createUser(normalizedEmail, passwordHash);
 
-    const emailVerificationToken =
-      this.userTokenService.createEmailVerificationToken(user.id, user.email);
-
-    console.log('Email verification token:', emailVerificationToken);
+    await this.createTokenAndSendEmail(user, normalizedEmail);
 
     const registerResponse: RegisterResponse = {
       id: user.id,
@@ -40,6 +35,33 @@ export class RegisterService {
     };
 
     return registerResponse;
+  }
+
+  private async createUser(email: string, passwordHash: string): Promise<User> {
+    return this.prisma.user.create({
+      data: {
+        email,
+        passwordHash,
+      },
+    });
+  }
+
+  private async createTokenAndSendEmail(
+    user: User,
+    email: string,
+  ): Promise<void> {
+    const token = await this.userTokenService.createEmailVerificationToken(
+      user.id,
+      email,
+    );
+    await this.mailService.sendTemplateEmail(
+      user.email,
+      'Verify your VRM account',
+      'verification-email',
+      {
+        verificationUrl: `${process.env.FRONTEND_URL}/verify-email?token=${token}`,
+      },
+    );
   }
 
   private validatePassword(password: string, confirmPassword: string): void {

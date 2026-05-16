@@ -1,0 +1,7 @@
+Welcome to VRM!
+
+Please verify your email by clicking the link below:
+
+{{verificationUrl}}
+
+If you did not create this account, you can ignore this email.

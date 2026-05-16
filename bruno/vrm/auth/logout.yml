@@ -1,7 +1,7 @@
 info:
   name: logout
   type: http
-  seq: 6
+  seq: 7
 
 http:
   method: POST
@@ -14,6 +14,11 @@ runtime:
       code: |-
         bru.setEnvVar('accessToken', '')
         bru.setEnvVar('refreshToken', '')
+    - type: tests
+      code: |-
+        test("Should logout successfully", () => {
+          expect(res.getStatus()).to.equal(204);
+        });
 
 settings:
   encodeUrl: true

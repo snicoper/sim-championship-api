@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { randomBytes } from 'crypto';
 import { PrismaService } from '../../../../../prisma/prisma.service';
 import { AppConfig } from '../../../../core/config/app.config';
 import { RefreshToken } from '../contracts/refresh-token.contract';
@@ -18,7 +17,8 @@ export class TokenService {
   async issueTokens(user: User): Promise<TokenResponse> {
     const accessToken = await this.createAccessToken(user);
 
-    const { refreshToken, refreshTokenHash } = await this.createRefreshToken();
+    const { refreshToken, refreshTokenHash } =
+      await this.createRefreshToken(user);
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -48,8 +48,17 @@ export class TokenService {
     return this.jwtService.signAsync(payload);
   }
 
-  private async createRefreshToken(): Promise<RefreshToken> {
-    const refreshToken = randomBytes(64).toString('hex');
+  private async createRefreshToken(user: User): Promise<RefreshToken> {
+    const payload = {
+      sub: user.id,
+      email: user.email,
+    };
+
+    const refreshToken = await this.jwtService.signAsync(payload, {
+      secret: AppConfig.jwt.refreshSecret,
+      expiresIn: `${AppConfig.jwt.refreshExpiresInDays}d`,
+    });
+
     const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
 
     return {

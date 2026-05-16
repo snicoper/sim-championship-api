@@ -6,12 +6,14 @@ import { MailModule } from '../../core/mail/mail.module';
 import { AuthController } from './auth.controller';
 import { TokenService } from './core/services/token.service';
 import { UserTokenService } from './core/services/user-token.service';
+import { JwtRefreshStrategy } from './core/strategies/jwt-refresh.strategy';
 import { JwtStrategy } from './core/strategies/jwt.strategy';
 import { LoginService } from './login/login.service';
 import { LogoutService } from './logout/logout.service';
 import { MeService } from './me/me.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { RegisterService } from './register/register.service';
+import { ResendVerifyEmailService } from './resend-verify-email/resend-verify-email.service';
 import { VerifyEmailService } from './verify-email/verify-email.service';
 
 const jwtExpiresIn =
@@ -29,15 +31,17 @@ const jwtExpiresIn =
   ],
   controllers: [AuthController],
   providers: [
+    JwtStrategy,
+    JwtRefreshStrategy,
     RegisterService,
     LoginService,
-    JwtStrategy,
     MeService,
     RefreshTokenService,
     TokenService,
     LogoutService,
     UserTokenService,
     VerifyEmailService,
+    ResendVerifyEmailService,
   ],
 })
 export class AuthModule {}

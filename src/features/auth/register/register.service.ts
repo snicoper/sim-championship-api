@@ -60,7 +60,7 @@ export class RegisterService {
       'Verify your VRM account',
       'verification-email',
       {
-        verificationUrl: `${process.env.FRONTEND_URL}/verify-email?token=${token}`,
+        verificationUrl: `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`,
       },
     );
 

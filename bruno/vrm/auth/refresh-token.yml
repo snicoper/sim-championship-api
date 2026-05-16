@@ -1,7 +1,7 @@
 info:
   name: refresh-token
   type: http
-  seq: 5
+  seq: 6
 
 http:
   method: POST
@@ -25,6 +25,10 @@ runtime:
     - type: tests
       code: |-
         const data = res.getBody();
+
+        test("Should refresh-token successfully", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
 
         test("Access token should exist", () => {
           expect(data.accessToken).to.exist;

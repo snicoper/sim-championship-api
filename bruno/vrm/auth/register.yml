@@ -36,9 +36,12 @@ runtime:
       code: |-
         const data = res.getBody();
 
-        test("Should return verification token after successful registration", () => {
+        test("Should register successfully", () => {
           expect(res.getStatus()).to.equal(201);
+        });
 
+
+        test("Should return verification token after successful registration", () => {
           expect(data.verificationToken).to.exist;
         });
 

@@ -4,6 +4,9 @@ export const AppConfig = {
   jwt: {
     secret: process.env.JWT_SECRET ?? '',
     expiresInMinutes: Number(process.env.JWT_EXPIRES_IN_MINUTES ?? 15),
+
+    refreshSecret: process.env.JWT_REFRESH_SECRET ?? '',
+    refreshExpiresInDays: Number(process.env.JWT_REFRESH_EXPIRES_IN_DAYS ?? 30),
   },
   corsOrigin: process.env.CORS_ORIGIN,
 };

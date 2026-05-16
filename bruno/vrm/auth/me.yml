@@ -1,7 +1,7 @@
 info:
   name: me
   type: http
-  seq: 4
+  seq: 5
 
 http:
   method: GET
@@ -12,6 +12,10 @@ runtime:
     - type: tests
       code: |-
         const data = res.getBody();
+
+        test("Should me successfully", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
 
         test("Should return authenticated user profile", () => {
           expect(data.id).to.be.a("string");

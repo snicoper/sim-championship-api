@@ -1,7 +1,4 @@
 export interface RegisterResponse {
-  id: string;
-  email: string;
-  isActive: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  // only available outside production for testing purposes.
+  verificationToken?: string;
 }

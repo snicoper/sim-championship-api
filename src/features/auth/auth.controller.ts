@@ -20,6 +20,9 @@ import { RefreshTokenRequest } from './refresh-token/refresh-token.request';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { RegisterRequest } from './register/register.request';
 import { RegisterService } from './register/register.service';
+import { VerifyEmailRequest } from './verify-email/verify-email.request';
+import { VerifyEmailService } from './verify-email/verify-email.service';
+import { RegisterResponse } from './register/register.response';
 
 @Controller('auth')
 export class AuthController {
@@ -28,6 +31,7 @@ export class AuthController {
     private readonly loginService: LoginService,
     private readonly meService: MeService,
     private readonly refreshTokenService: RefreshTokenService,
+    private readonly verifyEmailService: VerifyEmailService,
     private readonly logoutService: LogoutService,
   ) {}
 
@@ -38,8 +42,14 @@ export class AuthController {
   }
 
   @Post('register')
-  register(@Body() dto: RegisterRequest): Promise<MeResponse> {
+  register(@Body() dto: RegisterRequest): Promise<RegisterResponse> {
     return this.registerService.register(dto);
+  }
+
+  @Post('verify-email')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  verifyEmail(@Body() dto: VerifyEmailRequest): Promise<void> {
+    return this.verifyEmailService.verifyEmail(dto);
   }
 
   @Post('login')

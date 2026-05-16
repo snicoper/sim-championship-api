@@ -24,15 +24,16 @@ export class RegisterService {
     const passwordHash = await bcrypt.hash(dto.password, 10);
     const user = await this.createUser(normalizedEmail, passwordHash);
 
-    await this.createTokenAndSendEmail(user, normalizedEmail);
+    const verificationToken = await this.createTokenAndSendEmail(
+      user,
+      normalizedEmail,
+    );
 
-    const registerResponse: RegisterResponse = {
-      id: user.id,
-      email: user.email,
-      isActive: user.isActive,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    };
+    const registerResponse: RegisterResponse = {};
+
+    if (process.env.NODE_ENV !== 'production') {
+      registerResponse.verificationToken = verificationToken;
+    }
 
     return registerResponse;
   }
@@ -49,7 +50,7 @@ export class RegisterService {
   private async createTokenAndSendEmail(
     user: User,
     email: string,
-  ): Promise<void> {
+  ): Promise<string> {
     const token = await this.userTokenService.createEmailVerificationToken(
       user.id,
       email,
@@ -62,6 +63,8 @@ export class RegisterService {
         verificationUrl: `${process.env.FRONTEND_URL}/verify-email?token=${token}`,
       },
     );
+
+    return token;
   }
 
   private validatePassword(password: string, confirmPassword: string): void {

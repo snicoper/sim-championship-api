@@ -24,16 +24,22 @@ runtime:
         const random = Math.floor(Math.random() * 10000);
 
         bru.setVar('registerEmail', `test${timestamp}${random}@example.com`);
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+
+        bru.setVar(
+          'verificationToken',
+          data.verificationToken,
+        );
     - type: tests
       code: |-
         const data = res.getBody();
 
-        test("Should register a new user", () => {
+        test("Should return verification token after successful registration", () => {
           expect(res.getStatus()).to.equal(201);
 
-          expect(data.id).to.exist;
-          expect(data.email).to.exist;
-          expect(data.isActive).to.be.true;
+          expect(data.verificationToken).to.exist;
         });
 
 settings:

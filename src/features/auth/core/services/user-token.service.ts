@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { createHash, randomBytes } from 'crypto';
-import { UserTokenType } from '../types/user-token.type';
 import { PrismaService } from '../../../../../prisma/prisma.service';
+import { UserTokenType } from '../types/user-token.type';
 
 @Injectable()
 export class UserTokenService {
@@ -25,5 +25,36 @@ export class UserTokenService {
     });
 
     return token;
+  }
+
+  async verifyEmailToken(token: string): Promise<void> {
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+
+    const userToken = await this.prisma.userToken.findFirst({
+      where: {
+        tokenHash,
+        type: UserTokenType.EMAIL_VERIFICATION,
+        expiresAt: { gt: new Date() },
+        usedAt: null,
+      },
+    });
+
+    if (userToken === null) {
+      throw new ConflictException('Invalid or expired token');
+    }
+
+    const now = new Date();
+
+    await this.prisma.$transaction([
+      this.prisma.userToken.update({
+        where: { id: userToken.id },
+        data: { usedAt: now },
+      }),
+
+      this.prisma.user.update({
+        where: { id: userToken.userId! },
+        data: { emailVerifiedAt: now },
+      }),
+    ]);
   }
 }

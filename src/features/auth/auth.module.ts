@@ -12,6 +12,7 @@ import { LogoutService } from './logout/logout.service';
 import { MeService } from './me/me.service';
 import { RefreshTokenService } from './refresh-token/refresh-token.service';
 import { RegisterService } from './register/register.service';
+import { VerifyEmailService } from './verify-email/verify-email.service';
 
 const jwtExpiresIn =
   `${AppConfig.jwt.expiresInMinutes}m` as SignOptions['expiresIn'];
@@ -36,6 +37,7 @@ const jwtExpiresIn =
     TokenService,
     LogoutService,
     UserTokenService,
+    VerifyEmailService,
   ],
 })
 export class AuthModule {}

@@ -5,6 +5,7 @@ import { AppConfig } from '../../core/config/app.config';
 import { MailModule } from '../../core/mail/mail.module';
 import { AuthController } from './auth.controller';
 import { TokenService } from './core/services/token.service';
+import { UserTokenMailService } from './core/services/user-token-mail.service';
 import { UserTokenService } from './core/services/user-token.service';
 import { JwtRefreshStrategy } from './core/strategies/jwt-refresh.strategy';
 import { JwtStrategy } from './core/strategies/jwt.strategy';
@@ -33,14 +34,15 @@ const jwtExpiresIn =
   providers: [
     JwtStrategy,
     JwtRefreshStrategy,
+    TokenService,
+    UserTokenService,
+    UserTokenMailService,
     RegisterService,
     LoginService,
     MeService,
-    RefreshTokenService,
-    TokenService,
     LogoutService,
-    UserTokenService,
     VerifyEmailService,
+    RefreshTokenService,
     ResendVerifyEmailService,
   ],
 })

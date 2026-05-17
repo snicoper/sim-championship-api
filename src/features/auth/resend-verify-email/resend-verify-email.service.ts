@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../../../prisma/prisma.service';
-import { MailService } from '../../../core/mail/mail.service';
+import { UserTokenMailService } from '../core/services/user-token-mail.service';
 import { UserTokenService } from '../core/services/user-token.service';
 import { ResendVerifyEmailRequest } from './resend-verify-email.request';
 import { ResendVerifyEmailResponse } from './resend-verify-email.response';
@@ -11,7 +11,7 @@ export class ResendVerifyEmailService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly userTokenService: UserTokenService,
-    private readonly mailService: MailService,
+    private readonly userMailTokenService: UserTokenMailService,
   ) {}
 
   async resendVerificationEmail(
@@ -54,14 +54,7 @@ export class ResendVerifyEmailService {
       user.id,
       email,
     );
-    await this.mailService.sendTemplateEmail(
-      user.email,
-      'Verify your VRM account',
-      'verification-email',
-      {
-        verificationUrl: `${process.env.FRONTEND_URL}/auth/verify-email?token=${token}`,
-      },
-    );
+    await this.userMailTokenService.sendVerificationEmail(token, email);
 
     return token;
   }

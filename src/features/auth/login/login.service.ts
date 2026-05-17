@@ -1,9 +1,10 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { TokenResponse } from '../core/contracts/token.response';
-import { LoginRequest } from './login.request';
 import { TokenService } from '../core/services/token.service';
+import { LoginRequest } from './login.request';
 
 @Injectable()
 export class LoginService {
@@ -15,12 +16,23 @@ export class LoginService {
   async login(dto: LoginRequest): Promise<TokenResponse> {
     const normalizedEmail = dto.email.trim().toLowerCase();
 
-    const user = await this.prisma.user.findUnique({
+    const user: User | null = await this.prisma.user.findUnique({
       where: {
         email: normalizedEmail,
       },
     });
 
+    await this.validateLoginAccount(dto.password, user);
+
+    const tokenResponse = await this.authService.issueTokens(user!);
+
+    return tokenResponse;
+  }
+
+  private async validateLoginAccount(
+    password: string,
+    user: User | null,
+  ): Promise<void> {
     if (!user) {
       throw new ConflictException({
         code: 'invalid_credentials',
@@ -28,10 +40,7 @@ export class LoginService {
       });
     }
 
-    const isPasswordValid = await bcrypt.compare(
-      dto.password,
-      user.passwordHash,
-    );
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
 
     if (!isPasswordValid) {
       throw new ConflictException({
@@ -40,8 +49,18 @@ export class LoginService {
       });
     }
 
-    const tokenResponse = await this.authService.issueTokens(user);
+    if (!user.isActive) {
+      throw new ConflictException({
+        code: 'user_not_active',
+        detail: 'User is not active',
+      });
+    }
 
-    return tokenResponse;
+    if (!user.emailVerifiedAt) {
+      throw new ConflictException({
+        code: 'email_not_verified',
+        detail: 'Email is not verified',
+      });
+    }
   }
 }

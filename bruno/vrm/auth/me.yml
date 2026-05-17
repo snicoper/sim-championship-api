@@ -19,7 +19,7 @@ runtime:
 
         test("Should return authenticated user profile", () => {
           expect(data.id).to.be.a("string");
-          expect(data.email).to.equal("salva@example.com");
+          expect(data.email).to.equal(bru.getVar("registerEmail"));
           expect(data.isActive).to.be.true;
         });
 

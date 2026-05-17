@@ -18,4 +18,18 @@ export class UserTokenMailService {
       },
     );
   }
+
+  async sendPasswordResetEmail(
+    token: string,
+    recipientEmail: string,
+  ): Promise<void> {
+    await this.mailService.sendTemplateEmail(
+      recipientEmail,
+      `Reset your ${process.env.APP_NAME} password`,
+      'reset-password',
+      {
+        resetPasswordUrl: `${process.env.FRONTEND_URL}${process.env.RESET_PASSWORD_URI}?token=${token}`,
+      },
+    );
+  }
 }

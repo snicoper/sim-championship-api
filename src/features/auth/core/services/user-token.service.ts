@@ -11,7 +11,7 @@ export class UserTokenService {
   async createUserToken(
     userId: string,
     email: string,
-    userTokenType: UserTokenType = UserTokenType.EMAIL_VERIFICATION,
+    userTokenType: UserTokenType,
   ): Promise<string> {
     const token = randomBytes(32).toString('hex');
     const tokenHash = createHash('sha256').update(token).digest('hex');

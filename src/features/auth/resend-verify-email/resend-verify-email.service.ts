@@ -3,6 +3,7 @@ import { User } from '@prisma/client';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { UserTokenMailService } from '../core/services/user-token-mail.service';
 import { UserTokenService } from '../core/services/user-token.service';
+import { UserTokenType } from '../core/types/user-token.type';
 import { ResendVerifyEmailRequest } from './resend-verify-email.request';
 import { ResendVerifyEmailResponse } from './resend-verify-email.response';
 
@@ -48,7 +49,11 @@ export class ResendVerifyEmailService {
     user: User,
     email: string,
   ): Promise<string> {
-    const token = await this.userTokenService.createUserToken(user.id, email);
+    const token = await this.userTokenService.createUserToken(
+      user.id,
+      email,
+      UserTokenType.EMAIL_VERIFICATION,
+    );
     await this.userMailTokenService.sendVerificationEmail(token, email);
 
     return token;

@@ -13,6 +13,7 @@ import { TokenResponse } from './core/contracts/token.response';
 import { JwtAuthGuard } from './core/guards/jwt-auth/jwt-auth.guard';
 import { JwtRefreshTokenGuard } from './core/guards/jwt-auth/jwt-refresh.guard';
 import { ForgotPasswordRequest } from './forgot-password/forgot-password.request';
+import { ForgotPasswordResponse } from './forgot-password/forgot-password.response';
 import { ForgotPasswordService } from './forgot-password/forgot-password.service';
 import { LoginRequest } from './login/login.request';
 import { LoginService } from './login/login.service';
@@ -74,8 +75,10 @@ export class AuthController {
   }
 
   @Post('forgot-password')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  forgotPassword(@Body() dto: ForgotPasswordRequest): Promise<void> {
+  @HttpCode(HttpStatus.CREATED)
+  forgotPassword(
+    @Body() dto: ForgotPasswordRequest,
+  ): Promise<ForgotPasswordResponse> {
     return this.forgotPasswordService.forgotPassword(dto);
   }
 

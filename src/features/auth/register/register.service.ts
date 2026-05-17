@@ -4,6 +4,7 @@ import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { UserTokenMailService } from '../core/services/user-token-mail.service';
 import { UserTokenService } from '../core/services/user-token.service';
+import { UserTokenType } from '../core/types/user-token.type';
 import { RegisterRequest } from './register.request';
 import { RegisterResponse } from './register.response';
 
@@ -51,7 +52,11 @@ export class RegisterService {
     user: User,
     email: string,
   ): Promise<string> {
-    const token = await this.userTokenService.createUserToken(user.id, email);
+    const token = await this.userTokenService.createUserToken(
+      user.id,
+      email,
+      UserTokenType.EMAIL_VERIFICATION,
+    );
 
     await this.userMailTokenService.sendVerificationEmail(token, email);
 

@@ -1,7 +1,17 @@
+import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 import * as bycrypt from 'bcrypt';
+import 'dotenv/config';
 
-const prisma = new PrismaClient();
+const connectionString = process.env.DATABASE_URL!;
+
+const adapter = new PrismaPg({
+  connectionString,
+});
+
+const prisma = new PrismaClient({
+  adapter,
+});
 
 async function main(): Promise<void> {
   const passwordHash = await bycrypt.hash('Password123!', 10);

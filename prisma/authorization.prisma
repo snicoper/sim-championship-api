@@ -1,0 +1,62 @@
+/******************************
+* Role
+******************************/
+
+model Role {
+  id             String   @id @default(uuid())
+  organizationId String?
+  name           String
+  description    String?
+  isSystem       Boolean  @default(false)
+  isEditable     Boolean  @default(true)
+  createdAt      DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt      DateTime @updatedAt @db.Timestamptz(3)
+
+  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  permissions RolePermission[]
+  members     MemberRole[]
+
+  @@unique([organizationId, name])
+}
+
+/******************************
+* Permission
+******************************/
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+
+  roles RolePermission[]
+}
+
+/******************************
+* RolePermission
+******************************/
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+/******************************
+* MemberRole
+******************************/
+
+model MemberRole {
+  memberId String
+  roleId   String
+
+  member OrganizationMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  role   Role               @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([memberId, roleId])
+}

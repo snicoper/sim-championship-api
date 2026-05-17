@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import 'dotenv/config';
 import { AppModule } from './app.module';
 import { AppConfig } from './core/config/app.config';
 import { GlobalExceptionFilter } from './core/filters/global-exception.filter';

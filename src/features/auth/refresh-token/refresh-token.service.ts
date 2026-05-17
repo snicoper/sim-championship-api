@@ -22,7 +22,7 @@ export class RefreshTokenService {
 
     if (!user || !user?.refreshTokenHash) {
       throw new UnauthorizedException({
-        code: 'badRequest.invalidRefreshToken',
+        code: 'invalidRefreshToken',
         message: 'Invalid refresh token',
       });
     }
@@ -34,7 +34,7 @@ export class RefreshTokenService {
 
     if (!isValidRefreshToken) {
       throw new UnauthorizedException({
-        code: 'badRequest.invalidRefreshToken',
+        code: 'invalidRefreshToken',
         message: 'Invalid refresh token',
       });
     }

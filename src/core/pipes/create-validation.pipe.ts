@@ -27,7 +27,7 @@ export function createValidationPipe(): ValidationPipe {
         detail: 'Validation failed',
         status: 400,
         type: 'https://tools.ietf.org/html/rfc7231#section-6.5.1',
-        code: 'badRequest.validationFailed',
+        code: 'validationFailed',
         errors,
         timestamp: new Date().toISOString(),
       };

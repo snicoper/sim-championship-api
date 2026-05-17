@@ -1,0 +1,47 @@
+/******************************
+* User
+******************************/
+
+model User {
+  id           String @id @default(uuid())
+  email        String @unique
+  passwordHash String
+
+  isActive         Boolean @default(true)
+  refreshTokenHash String?
+
+  emailVerifiedAt DateTime?   @db.Timestamptz(3)
+  tokens          UserToken[]
+  organizations OrganizationMember[]
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+}
+
+/******************************
+* UserToken
+******************************/
+
+model UserToken {
+  id        String        @id @default(uuid())
+  userId    String?
+  email     String?
+  type      UserTokenType
+  tokenHash String        @unique
+  expiresAt DateTime      @db.Timestamptz(3)
+  usedAt    DateTime?     @db.Timestamptz(3)
+  createdAt DateTime      @default(now()) @db.Timestamptz(3)
+
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([email])
+  @@index([type])
+  @@index([expiresAt])
+}
+
+enum UserTokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  CHAMPIONSHIP_INVITATION
+}

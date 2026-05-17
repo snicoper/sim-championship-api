@@ -15,7 +15,7 @@ export class MeService {
 
     if (user === null) {
       throw new NotFoundException({
-        code: 'badRequest.userNotFound',
+        code: 'userNotFound',
         message: 'User not found',
       });
     }

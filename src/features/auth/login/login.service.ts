@@ -35,8 +35,8 @@ export class LoginService {
   ): Promise<void> {
     if (!user) {
       throw new ConflictException({
-        code: 'invalid_credentials',
-        detail: 'Incorrect email or password',
+        code: 'badRequest.invalidCredentials',
+        detail: 'Incorrect email or password 123123123123',
       });
     }
 
@@ -44,21 +44,21 @@ export class LoginService {
 
     if (!isPasswordValid) {
       throw new ConflictException({
-        code: 'invalid_credentials',
-        detail: 'Incorrect email or password',
+        code: 'badRequest.invalidCredentials',
+        detail: 'Incorrect email or password 123123123',
       });
     }
 
     if (!user.isActive) {
       throw new ConflictException({
-        code: 'user_not_active',
+        code: 'badRequest.userNotActive',
         detail: 'User is not active',
       });
     }
 
     if (!user.emailVerifiedAt) {
       throw new ConflictException({
-        code: 'email_not_verified',
+        code: 'badRequest.emailNotVerified',
         detail: 'Email is not verified',
       });
     }

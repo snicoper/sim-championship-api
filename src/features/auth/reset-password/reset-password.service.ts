@@ -14,7 +14,7 @@ export class ResetPasswordService {
     if (request.password !== request.confirmPassword) {
       throw new BadRequestException({
         errors: {
-          password: ['confirmPassword must match password'],
+          password: ['badRequest.passwordMismatch'],
         },
       });
     }

@@ -2,8 +2,8 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { TokenResponse } from '../core/contracts/token.response';
-import { RefreshTokenRequest } from './refresh-token.request';
 import { TokenService } from '../core/services/token.service';
+import { RefreshTokenRequest } from './refresh-token.request';
 
 @Injectable()
 export class RefreshTokenService {
@@ -21,7 +21,10 @@ export class RefreshTokenService {
     });
 
     if (!user || !user?.refreshTokenHash) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException({
+        code: 'badRequest.invalidRefreshToken',
+        message: 'Invalid refresh token',
+      });
     }
 
     const isValidRefreshToken = await bcrypt.compare(
@@ -30,7 +33,10 @@ export class RefreshTokenService {
     );
 
     if (!isValidRefreshToken) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException({
+        code: 'badRequest.invalidRefreshToken',
+        message: 'Invalid refresh token',
+      });
     }
 
     return this.tokenService.issueTokens(user);

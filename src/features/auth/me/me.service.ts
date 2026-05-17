@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { MeResponse } from './me.response';
 import { PrismaService } from '../../../../prisma/prisma.service';
+import { MeResponse } from './me.response';
 
 @Injectable()
 export class MeService {
@@ -15,6 +15,7 @@ export class MeService {
 
     if (user === null) {
       throw new NotFoundException({
+        code: 'badRequest.userNotFound',
         message: 'User not found',
       });
     }

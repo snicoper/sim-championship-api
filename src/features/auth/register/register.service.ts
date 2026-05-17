@@ -67,7 +67,7 @@ export class RegisterService {
     if (password !== confirmPassword) {
       throw new BadRequestException({
         errors: {
-          confirmPassword: ['confirmPassword must match password'],
+          confirmPassword: ['badRequest.passwordMismatch'],
         },
       });
     }
@@ -87,7 +87,7 @@ export class RegisterService {
     }
 
     if (existingUser.email === email) {
-      errors.email = ['Email is already in use'];
+      errors.email = ['badRequest.userAlreadyExists'];
     }
 
     if (Object.keys(errors).length > 0) {

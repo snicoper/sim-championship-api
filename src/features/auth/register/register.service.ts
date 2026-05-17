@@ -16,13 +16,13 @@ export class RegisterService {
     private readonly userMailTokenService: UserTokenMailService,
   ) {}
 
-  async register(dto: RegisterRequest): Promise<RegisterResponse> {
-    const normalizedEmail = dto.email.trim().toLowerCase();
+  async register(request: RegisterRequest): Promise<RegisterResponse> {
+    const normalizedEmail = request.email.trim().toLowerCase();
 
-    this.validatePassword(dto.password, dto.confirmPassword);
+    this.validatePassword(request.password, request.confirmPassword);
     await this.validateUserDoesNotExist(normalizedEmail);
 
-    const passwordHash = await bcrypt.hash(dto.password, 10);
+    const passwordHash = await bcrypt.hash(request.password, 10);
     const user = await this.createUser(normalizedEmail, passwordHash);
 
     const verificationToken = await this.createTokenAndSendEmail(

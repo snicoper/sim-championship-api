@@ -1,5 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { UserToken } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
 import { createHash, randomBytes } from 'crypto';
 import { PrismaService } from '../../../../../prisma/prisma.service';
 import { UserTokenType } from '../types/user-token.type';
@@ -55,6 +56,30 @@ export class UserTokenService {
       this.prisma.user.update({
         where: { id: userToken.userId! },
         data: { emailVerifiedAt: now },
+      }),
+    ]);
+  }
+
+  async consumePasswordResetToken(
+    token: string,
+    password: string,
+  ): Promise<void> {
+    const userToken = await this.getUserToken(
+      token,
+      UserTokenType.PASSWORD_RESET,
+    );
+
+    const passwordHash = await bcrypt.hash(password, 10);
+
+    await this.prisma.$transaction([
+      this.prisma.userToken.update({
+        where: { id: userToken.id },
+        data: { usedAt: new Date() },
+      }),
+
+      this.prisma.user.update({
+        where: { id: userToken.userId! },
+        data: { passwordHash, refreshTokenHash: null },
       }),
     ]);
   }

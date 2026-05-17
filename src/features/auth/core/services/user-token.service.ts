@@ -1,4 +1,5 @@
 import { ConflictException, Injectable } from '@nestjs/common';
+import { UserToken } from '@prisma/client';
 import { createHash, randomBytes } from 'crypto';
 import { PrismaService } from '../../../../../prisma/prisma.service';
 import { UserTokenType } from '../types/user-token.type';
@@ -7,9 +8,10 @@ import { UserTokenType } from '../types/user-token.type';
 export class UserTokenService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createEmailVerificationToken(
+  async createUserToken(
     userId: string,
     email: string,
+    userTokenType: UserTokenType = UserTokenType.EMAIL_VERIFICATION,
   ): Promise<string> {
     const token = randomBytes(32).toString('hex');
     const tokenHash = createHash('sha256').update(token).digest('hex');
@@ -18,7 +20,7 @@ export class UserTokenService {
       data: {
         userId,
         email,
-        type: UserTokenType.EMAIL_VERIFICATION,
+        type: userTokenType,
         tokenHash,
         expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24),
       },
@@ -27,21 +29,20 @@ export class UserTokenService {
     return token;
   }
 
-  async verifyEmailToken(token: string): Promise<void> {
-    const tokenHash = createHash('sha256').update(token).digest('hex');
+  async consumeToken(token: string, type: UserTokenType): Promise<void> {
+    const userToken = await this.getUserToken(token, type);
 
-    const userToken = await this.prisma.userToken.findFirst({
-      where: {
-        tokenHash,
-        type: UserTokenType.EMAIL_VERIFICATION,
-        expiresAt: { gt: new Date() },
-        usedAt: null,
-      },
+    await this.prisma.userToken.update({
+      where: { id: userToken.id },
+      data: { usedAt: new Date() },
     });
+  }
 
-    if (userToken === null) {
-      throw new ConflictException('Invalid or expired token');
-    }
+  async consumeEmailVerificationToken(token: string): Promise<void> {
+    const userToken = await this.getUserToken(
+      token,
+      UserTokenType.EMAIL_VERIFICATION,
+    );
 
     const now = new Date();
 
@@ -56,5 +57,27 @@ export class UserTokenService {
         data: { emailVerifiedAt: now },
       }),
     ]);
+  }
+
+  private async getUserToken(
+    token: string,
+    type: UserTokenType,
+  ): Promise<UserToken> {
+    const tokenHash = createHash('sha256').update(token).digest('hex');
+
+    const userToken = await this.prisma.userToken.findFirst({
+      where: {
+        tokenHash,
+        type: type,
+        expiresAt: { gt: new Date() },
+        usedAt: null,
+      },
+    });
+
+    if (!userToken) {
+      throw new ConflictException('Invalid or expired token');
+    }
+
+    return userToken;
   }
 }

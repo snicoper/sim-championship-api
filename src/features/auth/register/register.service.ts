@@ -51,10 +51,7 @@ export class RegisterService {
     user: User,
     email: string,
   ): Promise<string> {
-    const token = await this.userTokenService.createEmailVerificationToken(
-      user.id,
-      email,
-    );
+    const token = await this.userTokenService.createUserToken(user.id, email);
 
     await this.userMailTokenService.sendVerificationEmail(token, email);
 

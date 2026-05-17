@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../../../prisma/prisma.service';
 import { UserTokenMailService } from '../core/services/user-token-mail.service';
@@ -26,18 +26,16 @@ export class ResendVerifyEmailService {
       },
     });
 
+    const resentVerifyEmailResponse: ResendVerifyEmailResponse = {};
+
     if (!user) {
-      throw new NotFoundException({
-        message: 'User not found',
-      });
+      return resentVerifyEmailResponse;
     }
 
     const verificationToken = await this.createTokenAndSendEmail(
       user,
       normalizedEmail,
     );
-
-    const resentVerifyEmailResponse: ResendVerifyEmailResponse = {};
 
     if (process.env.NODE_ENV !== 'production') {
       resentVerifyEmailResponse.verificationToken = verificationToken;

@@ -1,15 +1,15 @@
 export enum Permission {
-  // Auth
-  AuthCreate = 'auth:create',
-  AuthRead = 'auth:read',
-  AuthUpdate = 'auth:update',
-  AuthDelete = 'auth:delete',
-
   // Users
   UsersCreate = 'users:create',
   UsersRead = 'users:read',
   UsersUpdate = 'users:update',
   UsersDelete = 'users:delete',
+
+  // User Profiles
+  UserProfilesCreate = 'user-profiles:create',
+  UserProfilesRead = 'user-profiles:read',
+  UserProfilesUpdate = 'user-profiles:update',
+  UserProfilesDelete = 'user-profiles:delete',
 
   // Roles
   RolesCreate = 'roles:create',

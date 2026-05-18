@@ -100,6 +100,23 @@ CREATE TABLE "OrganizationUser" (
     CONSTRAINT "OrganizationUser_pkey" PRIMARY KEY ("userId","organizationId")
 );
 
+-- CreateTable
+CREATE TABLE "UserProfile" (
+    "id" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
+    "slug" TEXT NOT NULL,
+    "nickname" TEXT NOT NULL,
+    "firstName" TEXT,
+    "lastName" TEXT,
+    "country" TEXT,
+    "bio" TEXT,
+    "avatarUrl" TEXT,
+    "createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMPTZ(3) NOT NULL,
+
+    CONSTRAINT "UserProfile_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
@@ -130,6 +147,12 @@ CREATE UNIQUE INDEX "Championship_organizationId_slug_key" ON "Championship"("or
 -- CreateIndex
 CREATE UNIQUE INDEX "Organization_slug_key" ON "Organization"("slug");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "UserProfile_userId_key" ON "UserProfile"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserProfile_slug_key" ON "UserProfile"("slug");
+
 -- AddForeignKey
 ALTER TABLE "UserToken" ADD CONSTRAINT "UserToken_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
@@ -156,3 +179,6 @@ ALTER TABLE "OrganizationUser" ADD CONSTRAINT "OrganizationUser_organizationId_f
 
 -- AddForeignKey
 ALTER TABLE "OrganizationUser" ADD CONSTRAINT "OrganizationUser_roleId_fkey" FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "UserProfile" ADD CONSTRAINT "UserProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

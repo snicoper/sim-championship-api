@@ -19,8 +19,10 @@ const rolePermissions: Record<Role, Permission[]> = {
   [Role.Admin]: allPermissions,
 
   [Role.User]: [
-    Permission.AuthRead,
     Permission.UsersRead,
+    Permission.UsersUpdate,
+    Permission.UserProfilesRead,
+    Permission.UserProfilesUpdate,
     Permission.OrganizationsRead,
     Permission.ChampionshipsRead,
   ],

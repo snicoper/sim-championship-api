@@ -52,7 +52,7 @@ export class AuthController {
 
   @Get('me')
   @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions(Permission.AuthRead)
+  @Permissions(Permission.UsersRead)
   @HttpCode(HttpStatus.OK)
   me(@Req() req: Request & { user: JwtPayload }): Promise<MeResponse> {
     return this.meService.getMe(req.user.sub);
@@ -109,8 +109,8 @@ export class AuthController {
   }
 
   @Post('logout')
-  @UseGuards(JwtAuthGuard, PermissionsGuard)
-  @Permissions(Permission.AuthRead)
+  @UseGuards(JwtAuthGuard)
+  @Permissions(Permission.UsersRead)
   @HttpCode(HttpStatus.NO_CONTENT)
   async logout(@Req() req: Request & { user: JwtPayload }): Promise<void> {
     await this.logoutService.logout(req.user.sub);

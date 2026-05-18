@@ -1,15 +1,15 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import { TokenResponse } from '../core/contracts/token.response';
-import { AuthRepository } from '../core/repositories/auth.repository';
+import { TokenResponse } from '../../../core/security/contracts/token.response';
+import { SecurityRepository } from '../../../core/security/repositories/security.repository';
 import { TokenService } from '../core/services/token.service';
 import { LoginRequest } from './login.request';
 
 @Injectable()
 export class LoginService {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly securityRepository: SecurityRepository,
     private readonly authService: TokenService,
   ) {}
 
@@ -17,7 +17,9 @@ export class LoginService {
     const normalizedEmail = dto.email.trim().toLowerCase();
 
     const user =
-      await this.authRepository.findByEmailWithAuthorization(normalizedEmail);
+      await this.securityRepository.findByEmailWithAuthorization(
+        normalizedEmail,
+      );
 
     await this.validateLoginAccount(dto.password, user);
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { AppConfig } from '../../../core/config/app.config';
-import { AuthRepository } from '../core/repositories/auth.repository';
+import { UserRepository } from '../core/repositories/user.repository';
 import { UserTokenMailService } from '../core/services/user-token-mail.service';
 import { UserTokenService } from '../core/services/user-token.service';
 import { UserTokenType } from '../core/types/user-token.type';
@@ -11,7 +11,7 @@ import { ForgotPasswordResponse } from './forgot-password.response';
 @Injectable()
 export class ForgotPasswordService {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: UserRepository,
     private readonly userTokenService: UserTokenService,
     private readonly userMailTokenService: UserTokenMailService,
   ) {}

@@ -8,13 +8,13 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
-import { Permissions } from '../../core/authorization/decorators/permissions.decorator';
-import { PermissionsGuard } from '../../core/authorization/guards/permissions.guard';
-import { Permission } from '../../core/authorization/permission.enum';
-import { JwtPayload } from './core/contracts/jwt-payload.contract';
-import { TokenResponse } from './core/contracts/token.response';
-import { JwtAuthGuard } from './core/guards/jwt-auth/jwt-auth.guard';
-import { JwtRefreshTokenGuard } from './core/guards/jwt-auth/jwt-refresh.guard';
+import { JwtPayload } from '../../core/security/contracts/jwt-payload.contract';
+import { TokenResponse } from '../../core/security/contracts/token.response';
+import { Permissions } from '../../core/security/decorators/permissions.decorator';
+import { JwtAuthGuard } from '../../core/security/guards/jwt-auth.guard';
+import { JwtRefreshTokenGuard } from '../../core/security/guards/jwt-refresh.guard';
+import { PermissionsGuard } from '../../core/security/guards/permissions.guard';
+import { Permission } from '../../core/security/types/permission.enum';
 import { ForgotPasswordRequest } from './forgot-password/forgot-password.request';
 import { ForgotPasswordResponse } from './forgot-password/forgot-password.response';
 import { ForgotPasswordService } from './forgot-password/forgot-password.service';

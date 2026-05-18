@@ -3,14 +3,13 @@ import { JwtModule } from '@nestjs/jwt';
 import type { SignOptions } from 'jsonwebtoken';
 import { AppConfig } from '../../core/config/app.config';
 import { MailModule } from '../../core/mail/mail.module';
+import { SecurityModule } from '../../core/security/security.module';
 import { AuthController } from './auth.controller';
-import { AuthRepository } from './core/repositories/auth.repository';
 import { UserTokenRepository } from './core/repositories/user-token.repository';
+import { UserRepository } from './core/repositories/user.repository';
 import { TokenService } from './core/services/token.service';
 import { UserTokenMailService } from './core/services/user-token-mail.service';
 import { UserTokenService } from './core/services/user-token.service';
-import { JwtRefreshStrategy } from './core/strategies/jwt-refresh.strategy';
-import { JwtStrategy } from './core/strategies/jwt.strategy';
 import { ForgotPasswordService } from './forgot-password/forgot-password.service';
 import { LoginService } from './login/login.service';
 import { LogoutService } from './logout/logout.service';
@@ -33,12 +32,11 @@ const jwtExpiresIn =
         expiresIn: jwtExpiresIn,
       },
     }),
+    SecurityModule,
   ],
   controllers: [AuthController],
   providers: [
-    JwtStrategy,
-    JwtRefreshStrategy,
-    AuthRepository,
+    UserRepository,
     UserTokenRepository,
     TokenService,
     UserTokenService,

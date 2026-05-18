@@ -1,14 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { User } from '@prisma/client';
 import { PrismaService } from '../../../../../prisma/prisma.service';
-import { Role } from '../../../../core/authorization/role.enum';
-import {
-  UserWithAuthorization,
-  userWithAuthorizationInclude,
-} from '../../../../core/database/includes/user-with-authorization.include';
+import { Role } from '../../../../core/security/types/role.enum';
 
 @Injectable()
-export class AuthRepository {
+export class UserRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findById(id: string): Promise<User | null> {
@@ -24,30 +20,6 @@ export class AuthRepository {
       where: {
         email,
       },
-    });
-  }
-
-  /** User -> Roles[] -> Permissions[] */
-  async findByIdWithAuthorization(
-    id: string,
-  ): Promise<UserWithAuthorization | null> {
-    return this.prisma.user.findUnique({
-      where: {
-        id: id,
-      },
-      include: userWithAuthorizationInclude,
-    });
-  }
-
-  /** User -> Roles[] -> Permissions[] */
-  async findByEmailWithAuthorization(
-    email: string,
-  ): Promise<UserWithAuthorization | null> {
-    return this.prisma.user.findUnique({
-      where: {
-        email: email,
-      },
-      include: userWithAuthorizationInclude,
     });
   }
 

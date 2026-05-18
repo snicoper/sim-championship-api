@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { AppConfig } from '../../../core/config/app.config';
-import { AuthRepository } from '../core/repositories/auth.repository';
+import { UserRepository } from '../core/repositories/user.repository';
 import { UserTokenMailService } from '../core/services/user-token-mail.service';
 import { UserTokenService } from '../core/services/user-token.service';
 import { UserTokenType } from '../core/types/user-token.type';
@@ -12,7 +12,7 @@ import { RegisterResponse } from './register.response';
 @Injectable()
 export class RegisterService {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: UserRepository,
     private readonly userTokenService: UserTokenService,
     private readonly userMailTokenService: UserTokenMailService,
   ) {}

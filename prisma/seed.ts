@@ -2,9 +2,9 @@ import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
-import { Permission } from '../src/core/authorization/permission.enum';
-import { Role } from '../src/core/authorization/role.enum';
 import { AppConfig } from '../src/core/config/app.config';
+import { Permission } from '../src/core/security/types/permission.enum';
+import { Role } from '../src/core/security/types/role.enum';
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({

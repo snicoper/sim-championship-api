@@ -4,14 +4,14 @@ import { User } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { AppConfig } from '../../../../core/config/app.config';
 import { UserWithAuthorization } from '../../../../core/database/includes/user-with-authorization.include';
-import { RefreshToken } from '../contracts/refresh-token.contract';
-import { TokenResponse } from '../contracts/token.response';
-import { AuthRepository } from '../repositories/auth.repository';
+import { RefreshToken } from '../../../../core/security/contracts/refresh-token.contract';
+import { TokenResponse } from '../../../../core/security/contracts/token.response';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class TokenService {
   constructor(
-    private readonly authRepository: AuthRepository,
+    private readonly authRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) {}
 

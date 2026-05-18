@@ -1,14 +1,14 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { AuthRepository } from '../../../features/auth/core/repositories/auth.repository';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 import { AuthenticatedRequest } from '../interfaces/authenticated-request.interface';
+import { SecurityRepository } from '../repositories/security.repository';
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly authRepository: AuthRepository,
+    private readonly securityRepository: SecurityRepository,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -28,7 +28,7 @@ export class PermissionsGuard implements CanActivate {
       return false;
     }
 
-    const user = await this.authRepository.findByIdWithAuthorization(
+    const user = await this.securityRepository.findByIdWithAuthorization(
       requestUser.sub,
     );
 

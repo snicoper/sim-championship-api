@@ -1,28 +1,27 @@
-/******************************
-* Role
-******************************/
+/**
+ * ****************************
+ * Role
+ * ****************************
+ */
 
 model Role {
-  id             String   @id @default(uuid())
-  organizationId String?
-  name           String
-  description    String?
-  isSystem       Boolean  @default(false)
-  isEditable     Boolean  @default(true)
-  createdAt      DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt      DateTime @updatedAt @db.Timestamptz(3)
+  id          String  @id @default(uuid())
+  name        String  @unique
+  description String?
 
-  organization Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  permissions RolePermission[]
-  members     MemberRole[]
-
-  @@unique([organizationId, name])
+  permissions       RolePermission[]
+  users             UserRole[]
+  organizationUsers OrganizationUser[]
 }
 
-/******************************
-* Permission
-******************************/
+/**
+ * ****************************
+ * Permission
+ * ****************************
+ */
 
 model Permission {
   id          String   @id @default(uuid())
@@ -33,9 +32,11 @@ model Permission {
   roles RolePermission[]
 }
 
-/******************************
-* RolePermission
-******************************/
+/**
+ * ****************************
+ * RolePermission
+ * ****************************
+ */
 
 model RolePermission {
   roleId       String
@@ -47,16 +48,18 @@ model RolePermission {
   @@id([roleId, permissionId])
 }
 
-/******************************
-* MemberRole
-******************************/
+/**
+ * ****************************
+ * UserRole
+ * ****************************
+ */
 
-model MemberRole {
-  memberId String
-  roleId   String
+model UserRole {
+  userId String
+  roleId String
 
-  member OrganizationMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  role   Role               @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
-  @@id([memberId, roleId])
+  @@id([userId, roleId])
 }

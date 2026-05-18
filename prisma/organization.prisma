@@ -1,6 +1,8 @@
-/******************************
-* Organization
-******************************/
+/**
+ * ****************************
+ * Organization
+ * ****************************
+ */
 
 model Organization {
   id        String   @id @default(uuid())
@@ -9,25 +11,26 @@ model Organization {
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 
-  members       OrganizationMember[]
-  roles         Role[]
+  users         OrganizationUser[]
   championships Championship[]
 }
 
-/******************************
-* OrganizationMember
-******************************/
+/**
+ * ****************************
+ * OrganizationUser
+ * ****************************
+ */
 
-model OrganizationMember {
-  id             String   @id @default(uuid())
+model OrganizationUser {
   userId         String
   organizationId String
-  createdAt      DateTime @default(now()) @db.Timestamptz(3)
+  roleId         String
+
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 
   user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role         Role         @relation(fields: [roleId], references: [id], onDelete: Restrict)
 
-  roles MemberRole[]
-
-  @@unique([userId, organizationId])
+  @@id([userId, organizationId])
 }

@@ -1,9 +1,11 @@
-/******************************
-* Championship
-******************************/
+/**
+ * ****************************
+ * Championship
+ * ****************************
+ */
 
 model Championship {
-  id             String   @id @default(uuid())
+  id             String @id @default(uuid())
   organizationId String
 
   name        String

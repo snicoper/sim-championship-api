@@ -1,6 +1,8 @@
-/******************************
-* User
-******************************/
+/**
+ * ****************************
+ * User
+ * ****************************
+ */
 
 model User {
   id           String @id @default(uuid())
@@ -10,17 +12,20 @@ model User {
   isActive         Boolean @default(true)
   refreshTokenHash String?
 
-  emailVerifiedAt DateTime?   @db.Timestamptz(3)
+  emailVerifiedAt DateTime?          @db.Timestamptz(3)
   tokens          UserToken[]
-  organizations OrganizationMember[]
+  organizations   OrganizationUser[]
+  roles           UserRole[]
 
   createdAt DateTime @default(now()) @db.Timestamptz(3)
   updatedAt DateTime @updatedAt @db.Timestamptz(3)
 }
 
-/******************************
-* UserToken
-******************************/
+/**
+ * ****************************
+ * UserToken
+ * ****************************
+ */
 
 model UserToken {
   id        String        @id @default(uuid())

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '@prisma/client';
+import { AppConfig } from '../../../core/config/app.config';
 import { AuthRepository } from '../core/repositories/auth.repository';
 import { UserTokenMailService } from '../core/services/user-token-mail.service';
 import { UserTokenService } from '../core/services/user-token.service';
@@ -30,7 +31,7 @@ export class ForgotPasswordService {
       request.email,
     );
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (!AppConfig.isProduction) {
       forgotPasswordResponse.verificationToken = verificationToken;
     }
 

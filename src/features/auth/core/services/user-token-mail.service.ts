@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { AppConfig } from '../../../../core/config/app.config';
 import { MailService } from '../../../../core/mail/mail.service';
 
 @Injectable()
@@ -11,10 +12,10 @@ export class UserTokenMailService {
   ): Promise<void> {
     await this.mailService.sendTemplateEmail(
       recipientEmail,
-      `Verify your ${process.env.APP_NAME} account`,
+      `Verify your ${AppConfig.appName} account`,
       'verification-email',
       {
-        verificationUrl: `${process.env.FRONTEND_URL}${process.env.VERIFY_EMAIL_URI}?token=${token}`,
+        verificationUrl: `${AppConfig.front.url}${AppConfig.front.verifyEmailUri}?token=${token}`,
       },
     );
   }
@@ -25,10 +26,10 @@ export class UserTokenMailService {
   ): Promise<void> {
     await this.mailService.sendTemplateEmail(
       recipientEmail,
-      `Reset your ${process.env.APP_NAME} password`,
+      `Reset your ${AppConfig.appName} password`,
       'reset-password',
       {
-        resetPasswordUrl: `${process.env.FRONTEND_URL}${process.env.RESET_PASSWORD_URI}?token=${token}`,
+        resetPasswordUrl: `${AppConfig.front.url}${AppConfig.front.resetPasswordUri}?token=${token}`,
       },
     );
   }

@@ -4,10 +4,11 @@ import * as bcrypt from 'bcrypt';
 import 'dotenv/config';
 import { Permission } from '../src/core/authorization/permission.enum';
 import { Role } from '../src/core/authorization/role.enum';
+import { AppConfig } from '../src/core/config/app.config';
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({
-    connectionString: process.env.DATABASE_URL!,
+    connectionString: AppConfig.databaseUrl,
   }),
 });
 

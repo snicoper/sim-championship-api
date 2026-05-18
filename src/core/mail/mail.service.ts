@@ -2,27 +2,28 @@ import { Injectable } from '@nestjs/common';
 import * as fs from 'fs/promises';
 import * as nodemailer from 'nodemailer';
 import { join } from 'path';
+import { AppConfig } from '../config/app.config';
 
 @Injectable()
 export class MailService {
   private readonly auth =
-    process.env.MAIL_USER && process.env.MAIL_PASSWORD
+    AppConfig.mail.user && AppConfig.mail.password
       ? {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASSWORD,
+          user: AppConfig.mail.user,
+          pass: AppConfig.mail.password,
         }
       : undefined;
 
   private readonly transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST,
-    port: Number(process.env.MAIL_PORT),
-    secure: process.env.MAIL_SECURE === 'true',
+    host: AppConfig.mail.host,
+    port: Number(AppConfig.mail.port),
+    secure: AppConfig.mail.secure,
     auth: this.auth,
   });
 
   async sendEmail(to: string, subject: string, text: string): Promise<void> {
     await this.transporter.sendMail({
-      from: process.env.MAIL_FROM,
+      from: AppConfig.mail.from,
       to,
       subject,
       text,

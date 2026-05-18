@@ -6,6 +6,7 @@ import { UserTokenService } from '../core/services/user-token.service';
 import { UserTokenType } from '../core/types/user-token.type';
 import { ResendVerifyEmailRequest } from './resend-verify-email.request';
 import { ResendVerifyEmailResponse } from './resend-verify-email.response';
+import { AppConfig } from '../../../core/config/app.config';
 
 @Injectable()
 export class ResendVerifyEmailService {
@@ -34,7 +35,7 @@ export class ResendVerifyEmailService {
       normalizedEmail,
     );
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (!AppConfig.isProduction) {
       resentVerifyEmailResponse.verificationToken = verificationToken;
     }
 

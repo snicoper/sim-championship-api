@@ -7,6 +7,7 @@ import { UserTokenService } from '../core/services/user-token.service';
 import { UserTokenType } from '../core/types/user-token.type';
 import { RegisterRequest } from './register.request';
 import { RegisterResponse } from './register.response';
+import { AppConfig } from '../../../core/config/app.config';
 
 @Injectable()
 export class RegisterService {
@@ -32,7 +33,7 @@ export class RegisterService {
 
     const registerResponse: RegisterResponse = {};
 
-    if (process.env.NODE_ENV !== 'production') {
+    if (!AppConfig.isProduction) {
       registerResponse.verificationToken = verificationToken;
     }
 

@@ -1,0 +1,45 @@
+info:
+  name: refresh-token - 200
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/refresh-token"
+  body:
+    type: json
+    data: |-
+      {
+        "refreshToken": "{{refreshToken}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+
+        bru.setEnvVar('accessToken', data.accessToken)
+        bru.setEnvVar('refreshToken', data.refreshToken)
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Should refresh-token successfully", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("Access token should exist", () => {
+          expect(data.accessToken).to.exist;
+        });
+
+        test("Refresh token should exist", () => {
+          expect(data.refreshToken).to.exist;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -6,6 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { AppConfig } from '../config/app.config';
 import { ProblemDetailsResponse } from '../interfaces/problem-details-response.interface';
 
 @Catch()
@@ -43,9 +44,13 @@ export class GlobalExceptionFilter implements ExceptionFilter {
           ? body.detail
           : typeof body.message === 'string'
             ? body.message
-            : isHttpException
+            : exception instanceof Error
               ? exception.message
               : 'Internal server error',
+      stack:
+        AppConfig.isDevelopment && exception instanceof Error
+          ? exception.stack
+          : undefined,
       instance: request.url,
       code:
         typeof body.code === 'string' ? body.code : this.getDefaultCode(status),

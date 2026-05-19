@@ -1,8 +1,13 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsSlugField } from '../../../core/validators/custom-validator';
 
 export class UpdateRequest {
   @IsString()
+  @IsNotEmpty()
   nickname!: string;
+
+  @IsSlugField()
+  slug!: string;
 
   @IsOptional()
   @IsString()

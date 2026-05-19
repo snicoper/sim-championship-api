@@ -1,18 +1,18 @@
 info:
-  name: register
+  name: register - 201
   type: http
   seq: 1
 
 http:
   method: POST
-  url: "{{base-url}}/auth/register"
+  url: "{{baseUrl}}/auth/register"
   body:
     type: json
     data: |-
       {
         "email": "{{registerEmail}}",
-        "password": "Password123!",
-        "confirmPassword": "Password123!"
+        "password": "{{userPassword}}",
+        "confirmPassword": "{{userPassword}}"
       }
   auth: inherit
 

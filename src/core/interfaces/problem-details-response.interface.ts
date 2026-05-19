@@ -7,4 +7,6 @@ export interface ProblemDetailsResponse {
   code?: string;
   errors?: Record<string, string[]>;
   timestamp: string;
+
+  stack?: string;
 }

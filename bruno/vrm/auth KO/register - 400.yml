@@ -1,0 +1,38 @@
+info:
+  name: register - 400
+  type: http
+  seq: 1
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/register"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "",
+        "password": "",
+        "confirmPassword": ""
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Should register successfully", () => {
+          expect(res.getStatus()).to.equal(400);
+        });
+
+
+        test("Should return verification token after successful registration", () => {
+          expect(data.verificationToken).to.not.exist;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,7 +1,7 @@
 name: dev
 variables:
-  - name: base-url
+  - name: baseUrl
     value: |
       http://localhost:3000
-  - name: accessToken
-    value: ""
+  - name: userPassword
+    value: Password123!

@@ -1,11 +1,11 @@
 info:
-  name: refresh-token
+  name: refresh-token - 401
   type: http
-  seq: 6
+  seq: 5
 
 http:
   method: POST
-  url: "{{base-url}}/auth/refresh-token"
+  url: "{{baseUrl}}/auth/refresh-token"
   body:
     type: json
     data: |-
@@ -26,16 +26,8 @@ runtime:
       code: |-
         const data = res.getBody();
 
-        test("Should refresh-token successfully", () => {
-          expect(res.getStatus()).to.equal(200);
-        });
-
-        test("Access token should exist", () => {
-          expect(data.accessToken).to.exist;
-        });
-
-        test("Refresh token should exist", () => {
-          expect(data.refreshToken).to.exist;
+        test("Should refresh-token unauthorized", () => {
+          expect(res.getStatus()).to.equal(401);
         });
 
 settings:

@@ -1,17 +1,17 @@
 info:
-  name: login
+  name: login - 200
   type: http
-  seq: 4
+  seq: 2
 
 http:
   method: POST
-  url: "{{base-url}}/auth/login"
+  url: "{{baseUrl}}/auth/login"
   body:
     type: json
     data: |-
       {
         "email": "{{registerEmail}}",
-        "password": "Password123!"
+        "password": "{{userPassword}}"
       }
   auth: inherit
 

@@ -1,6 +1,6 @@
-import { IsEmail } from 'class-validator';
+import { IsEmailField } from '../../../core/validators/custom-validator';
 
 export class ResendVerifyEmailRequest {
-  @IsEmail()
+  @IsEmailField()
   email!: string;
 }

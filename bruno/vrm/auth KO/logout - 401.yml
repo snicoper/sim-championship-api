@@ -1,0 +1,27 @@
+info:
+  name: logout - 401
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/logout"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setEnvVar('accessToken', '')
+        bru.setEnvVar('refreshToken', '')
+    - type: tests
+      code: |-
+        test("Should logout unauthorized", () => {
+          expect(res.getStatus()).to.equal(401);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

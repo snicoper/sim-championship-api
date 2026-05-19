@@ -1,0 +1,46 @@
+info:
+  name: login - 200
+  type: http
+  seq: 4
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "{{registerEmail}}",
+        "password": "{{userPassword}}"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+
+        bru.setEnvVar('accessToken', data.accessToken)
+        bru.setEnvVar('refreshToken', data.refreshToken)
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Should login successfully", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("Access token should exist", () => {
+          expect(data.accessToken).to.exist;
+        });
+
+        test("Refresh token should exist", () => {
+          expect(data.refreshToken).to.exist;
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

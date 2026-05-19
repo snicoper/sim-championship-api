@@ -1,0 +1,47 @@
+info:
+  name: login - 400
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/login"
+  body:
+    type: json
+    data: |-
+      {
+        "email": "",
+        "password": "11"
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        const data = res.getBody();
+
+        bru.setEnvVar('accessToken', data.accessToken)
+        bru.setEnvVar('refreshToken', data.refreshToken)
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Should login validation failed", () => {
+          expect(res.getStatus()).to.equal(400);
+        });
+
+        test("Should login validation failed email", () => {
+          expect(data.errors.email).to.contain('isEmail');
+          expect(data.errors.email).to.contain('isNotEmpty');
+        });
+
+        test("Should login validation failed password length", () => {
+          expect(data.errors.password).to.contain('minLength');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

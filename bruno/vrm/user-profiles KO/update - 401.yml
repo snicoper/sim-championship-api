@@ -1,0 +1,41 @@
+info:
+  name: update - 401
+  type: http
+  seq: 2
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/user-profiles"
+  body:
+    type: json
+    data: |-
+      {
+        "nickname": "A.Test",
+        "slug": "{{userProfileSlug}}",
+        "firstName": "Amen",
+        "lastName": "Test",
+        "country": "",
+        "bio": "",
+        "avatarUrl": ""
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * 10000);
+
+        bru.setVar('userProfileSlug', `test${timestamp}${random}`);
+    - type: tests
+      code: |-
+        test("Should update unauthorized", () => {
+          expect(res.getStatus()).to.equal(401);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserProfile } from '@prisma/client';
 import { randomUUID } from 'crypto';
-import { slugify } from '../../../core/utils/string.utils';
 import { UserProfileRepository } from '../core/repositories/user-profile.repository';
 import { UpdateRequest } from './update.request';
 import { UpdateResponse } from './update.response';
@@ -20,7 +19,7 @@ export class UpdateService {
       id: userProfile?.id ?? randomUUID(),
       userId,
       nickname: request.nickname,
-      slug: slugify(request.nickname),
+      slug: request.slug,
       firstName: request.firstName ?? userProfile?.firstName ?? null,
       lastName: request.lastName ?? userProfile?.lastName ?? null,
       country: request.country ?? userProfile?.country ?? null,

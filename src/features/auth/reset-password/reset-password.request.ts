@@ -1,7 +1,8 @@
-import { IsString, MinLength } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class ResetPasswordRequest {
   @IsString()
+  @IsNotEmpty()
   token!: string;
 
   @IsString()

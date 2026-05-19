@@ -1,16 +1,16 @@
 info:
-  name: verify-email
+  name: resend-verify-email - 201
   type: http
-  seq: 3
+  seq: 2
 
 http:
   method: POST
-  url: "{{base-url}}/auth/verify-email"
+  url: "{{baseUrl}}/auth/resend-verify-email"
   body:
     type: json
     data: |-
       {
-        "token": "{{verificationToken}}"
+        "email": "{{registerEmail}}"
       }
   auth: inherit
 
@@ -18,8 +18,8 @@ runtime:
   scripts:
     - type: tests
       code: |-
-        test("Should verify email successfully", () => {
-          expect(res.getStatus()).to.equal(204);
+        test("Should resend verify email successfully", () => {
+          expect(res.getStatus()).to.equal(201);
         });
 
 settings:

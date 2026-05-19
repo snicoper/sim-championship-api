@@ -1,7 +1,8 @@
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
+import { IsEmailField } from '../../../core/validators/custom-validator';
 
 export class LoginRequest {
-  @IsEmail()
+  @IsEmailField()
   email!: string;
 
   @IsString()

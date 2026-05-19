@@ -1,0 +1,27 @@
+info:
+  name: logout - 204
+  type: http
+  seq: 7
+
+http:
+  method: POST
+  url: "{{baseUrl}}/auth/logout"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: after-response
+      code: |-
+        bru.setEnvVar('accessToken', '')
+        bru.setEnvVar('refreshToken', '')
+    - type: tests
+      code: |-
+        test("Should logout successfully", () => {
+          expect(res.getStatus()).to.equal(204);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

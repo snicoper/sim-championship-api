@@ -1,0 +1,52 @@
+info:
+  name: update - 400
+  type: http
+  seq: 4
+
+http:
+  method: PUT
+  url: "{{baseUrl}}/user-profiles"
+  body:
+    type: json
+    data: |-
+      {
+        "nickname": "",
+        "slug": "",
+        "firstName": "",
+        "lastName": "",
+        "country": "",
+        "bio": "",
+        "avatarUrl": ""
+      }
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: before-request
+      code: |-
+        const timestamp = Date.now();
+        const random = Math.floor(Math.random() * 10000);
+
+        bru.setVar('userProfileSlug', `test${timestamp}${random}`);
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Should update validationFailed", () => {
+          expect(res.getStatus()).to.equal(400);
+        });
+
+        test("Should update validation failed nickname", () => {
+          expect(data.errors.slug).to.contain('isNotEmpty');
+        });
+
+        test("Should update validation failed slug", () => {
+          expect(data.errors.slug).to.contain('matches');
+          expect(data.errors.slug).to.contain('isNotEmpty');
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

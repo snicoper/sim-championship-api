@@ -27,7 +27,6 @@ export function IsNotEmptyField(): PropertyDecorator {
 
 export function IsEmailField(): PropertyDecorator {
   return applyDecorators(
-    IsStringField(),
     IsNotEmptyField(),
     Matches(RegexUtils.email, {
       message: 'isEmailField',
@@ -56,10 +55,5 @@ export function MinLengthField(minLength: number): PropertyDecorator {
 }
 
 export function IsOptionalField(): PropertyDecorator {
-  return applyDecorators(
-    IsStringField(),
-    IsOptional({
-      message: 'isOptionalField',
-    }),
-  );
+  return applyDecorators(IsStringField(), IsOptional());
 }

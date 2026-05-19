@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "nickname": "A.Test",
-        "slug": "{{userProfileSlug}}",
+        "slug": "{{userProfileSlugTmp}}",
         "firstName": "Amen",
         "lastName": "Test",
         "country": "",
@@ -27,7 +27,7 @@ runtime:
         const timestamp = Date.now();
         const random = Math.floor(Math.random() * 10000);
 
-        bru.setVar('userProfileSlug', `test${timestamp}${random}`);
+        bru.setVar('userProfileSlugTmp', `test${timestamp}${random}`);
     - type: tests
       code: |-
         test("Should update unauthorized", () => {

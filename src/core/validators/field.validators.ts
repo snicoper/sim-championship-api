@@ -1,23 +1,65 @@
 import { applyDecorators } from '@nestjs/common';
-import { IsNotEmpty, IsString, Matches } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Matches,
+  MinLength,
+} from 'class-validator';
 import { RegexUtils } from '../utils/regex.utils';
+
+export function IsStringField(): PropertyDecorator {
+  return applyDecorators(
+    IsString({
+      message: 'isStringField',
+    }),
+  );
+}
+
+export function IsNotEmptyField(): PropertyDecorator {
+  return applyDecorators(
+    IsStringField(),
+    IsNotEmpty({
+      message: 'isNotEmptyField',
+    }),
+  );
+}
 
 export function IsEmailField(): PropertyDecorator {
   return applyDecorators(
-    IsString(),
-    IsNotEmpty(),
+    IsStringField(),
+    IsNotEmptyField(),
     Matches(RegexUtils.email, {
-      message: 'isEmail',
+      message: 'isEmailField',
     }),
   );
 }
 
 export function IsSlugField(): PropertyDecorator {
   return applyDecorators(
-    IsString(),
-    IsNotEmpty(),
+    IsStringField(),
+    IsNotEmptyField(),
     Matches(RegexUtils.slug, {
-      message: 'isSlug',
+      message: 'isSlugField',
+    }),
+  );
+}
+
+export function MinLengthField(minLength: number): PropertyDecorator {
+  return applyDecorators(
+    IsStringField(),
+    IsNotEmptyField(),
+    MinLength(minLength, {
+      message: 'minLengthField',
+    }),
+  );
+}
+
+export function IsOptionalField(): PropertyDecorator {
+  return applyDecorators(
+    IsStringField(),
+    IsOptional({
+      message: 'isOptionalField',
     }),
   );
 }

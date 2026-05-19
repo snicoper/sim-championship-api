@@ -1,0 +1,29 @@
+info:
+  name: slug-availability - 200
+  type: http
+  seq: 4
+
+http:
+  method: GET
+  url: "{{baseUrl}}/user-profiles/slug-availability/random-slug"
+  auth: inherit
+
+runtime:
+  scripts:
+    - type: tests
+      code: |-
+        const data = res.getBody();
+
+        test("Should slug-availability successfully", () => {
+          expect(res.getStatus()).to.equal(200);
+        });
+
+        test("Should slug-availability return isAvailable true", () => {
+          expect(data.isAvailable).to.equal(true);
+        });
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

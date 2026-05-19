@@ -1,7 +1,6 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmptyField } from '../../../core/validators/field.validators';
 
 export class VerifyEmailRequest {
-  @IsString()
-  @IsNotEmpty()
+  @IsNotEmptyField()
   token!: string;
 }

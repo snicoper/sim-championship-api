@@ -16,7 +16,7 @@ export function createValidationPipe(): ValidationPipe {
     ): BadRequestException => {
       const errors = validationErrors.reduce<Record<string, string[]>>(
         (acc, error) => {
-          acc[error.property] = Object.keys(error.constraints ?? {});
+          acc[error.property] = Object.values(error.constraints ?? {});
 
           return acc;
         },

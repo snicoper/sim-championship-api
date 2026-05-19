@@ -27,7 +27,7 @@ runtime:
         const timestamp = Date.now();
         const random = Math.floor(Math.random() * 10000);
 
-        bru.setVar('userProfileSlug', `test${timestamp}${random}`);
+        bru.setVar('userProfileSlugTemp', `test${timestamp}${random}`);
     - type: tests
       code: |-
         const data = res.getBody();
@@ -37,12 +37,12 @@ runtime:
         });
 
         test("Should update validation failed nickname", () => {
-          expect(data.errors.slug).to.contain('isNotEmpty');
+          expect(data.errors.nickname).to.contain('isNotEmptyField');
         });
 
         test("Should update validation failed slug", () => {
-          expect(data.errors.slug).to.contain('matches');
-          expect(data.errors.slug).to.contain('isNotEmpty');
+          expect(data.errors.slug).to.contain('isNotEmptyField');
+          expect(data.errors.slug).to.contain('isSlugField');
         });
 
 settings:

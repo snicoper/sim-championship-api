@@ -11,7 +11,7 @@ http:
     data: |-
       {
         "email": "",
-        "password": "11"
+        "password": ""
       }
   auth: inherit
 
@@ -32,12 +32,11 @@ runtime:
         });
 
         test("Should login validation failed email", () => {
-          expect(data.errors.email).to.contain('isEmail');
-          expect(data.errors.email).to.contain('isNotEmpty');
+          expect(data.errors.email).to.contain('isEmailField');
         });
 
         test("Should login validation failed password length", () => {
-          expect(data.errors.password).to.contain('minLength');
+          expect(data.errors.password).to.contain('minLengthField');
         });
 
 settings:

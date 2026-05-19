@@ -1,15 +1,15 @@
-import { IsNotEmpty, IsString, MinLength } from 'class-validator';
+import {
+  IsNotEmptyField,
+  MinLengthField,
+} from '../../../core/validators/field.validators';
 
 export class ResetPasswordRequest {
-  @IsString()
-  @IsNotEmpty()
+  @IsNotEmptyField()
   token!: string;
 
-  @IsString()
-  @MinLength(8)
+  @MinLengthField(8)
   password!: string;
 
-  @IsString()
-  @MinLength(8)
+  @MinLengthField(8)
   confirmPassword!: string;
 }

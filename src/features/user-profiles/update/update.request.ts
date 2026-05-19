@@ -1,31 +1,28 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { IsSlugField } from '../../../core/validators/field.validators';
+import {
+  IsNotEmptyField,
+  IsOptionalField,
+  IsSlugField,
+} from '../../../core/validators/field.validators';
 
 export class UpdateRequest {
-  @IsString()
-  @IsNotEmpty()
+  @IsNotEmptyField()
   nickname!: string;
 
   @IsSlugField()
   slug!: string;
 
-  @IsOptional()
-  @IsString()
+  @IsOptionalField()
   firstName?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsOptionalField()
   lastName?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsOptionalField()
   country?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsOptionalField()
   bio?: string;
 
-  @IsOptional()
-  @IsString()
+  @IsOptionalField()
   avatarUrl?: string;
 }

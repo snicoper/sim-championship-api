@@ -17,6 +17,9 @@ import { Permission } from '../../core/security/types/permission.enum';
 import { GetBySlugRequest } from './get-by-slug/get-by-slug.request';
 import { GetBySlugResponse } from './get-by-slug/get-by-slug.response';
 import { GetBySlugService } from './get-by-slug/get-by-slug.service';
+import { SlugAvailabilityRequest } from './slug-availability/slug-availability.request';
+import { SlugAvailabilityResponse } from './slug-availability/slug-availability.response';
+import { SlugAvailabilityService } from './slug-availability/slug-availability.service';
 import { UpdateRequest } from './update/update.request';
 import { UpdateResponse } from './update/update.response';
 import { UpdateService } from './update/update.service';
@@ -26,7 +29,16 @@ export class UserProfilesController {
   constructor(
     private readonly getBySlugService: GetBySlugService,
     private readonly updateService: UpdateService,
+    private readonly slugAvailabilityService: SlugAvailabilityService,
   ) {}
+
+  @Get('slug-availability/:slug')
+  @HttpCode(HttpStatus.OK)
+  async availabilitySlug(
+    @Param() request: SlugAvailabilityRequest,
+  ): Promise<SlugAvailabilityResponse> {
+    return this.slugAvailabilityService.handle(request.slug);
+  }
 
   @Get(':slug')
   @HttpCode(HttpStatus.OK)

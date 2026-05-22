@@ -15,8 +15,7 @@ http:
         "firstName": "Amen",
         "lastName": "Test",
         "country": "",
-        "bio": "",
-        "avatarUrl": ""
+        "bio": ""
       }
   auth: inherit
 

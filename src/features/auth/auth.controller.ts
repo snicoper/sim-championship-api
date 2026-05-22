@@ -5,11 +5,11 @@ import {
   HttpCode,
   HttpStatus,
   Post,
-  Req,
   UseGuards,
 } from '@nestjs/common';
-import { JwtPayload } from '../../core/security/contracts/jwt-payload.contract';
+import { type JwtPayload } from '../../core/security/contracts/jwt-payload.contract';
 import { TokenResponse } from '../../core/security/contracts/token.response';
+import { CurrentUser } from '../../core/security/decorators/current-user.decorator';
 import { Permissions } from '../../core/security/decorators/permissions.decorator';
 import { JwtAuthGuard } from '../../core/security/guards/jwt-auth.guard';
 import { JwtRefreshTokenGuard } from '../../core/security/guards/jwt-refresh.guard';
@@ -54,8 +54,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Permissions(Permission.UsersRead)
   @HttpCode(HttpStatus.OK)
-  me(@Req() req: Request & { user: JwtPayload }): Promise<MeResponse> {
-    return this.meService.handle(req.user.sub);
+  me(@CurrentUser() user: JwtPayload): Promise<MeResponse> {
+    return this.meService.handle(user.sub);
   }
 
   @Post('register')
@@ -102,17 +102,17 @@ export class AuthController {
   @UseGuards(JwtRefreshTokenGuard)
   @HttpCode(HttpStatus.OK)
   refresh(
-    @Req() req: Request & { user: JwtPayload },
+    @CurrentUser() user: JwtPayload,
     @Body() dto: RefreshTokenRequest,
   ): Promise<TokenResponse> {
-    return this.refreshTokenService.handle(dto, req.user.sub);
+    return this.refreshTokenService.handle(dto, user.sub);
   }
 
   @Post('logout')
   @UseGuards(JwtAuthGuard)
   @Permissions(Permission.UsersRead)
   @HttpCode(HttpStatus.NO_CONTENT)
-  async logout(@Req() req: Request & { user: JwtPayload }): Promise<void> {
-    await this.logoutService.handle(req.user.sub);
+  async logout(@CurrentUser() user: JwtPayload): Promise<void> {
+    await this.logoutService.handle(user.sub);
   }
 }

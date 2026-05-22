@@ -1,0 +1,22 @@
+info:
+  name: upload-avatar - 200
+  type: http
+  seq: 6
+
+http:
+  method: POST
+  url: "{{baseUrl}}/user-profiles/upload-avatar"
+  body:
+    type: multipart-form
+    data:
+      - name: avatar
+        type: file
+        value:
+          - C:\Users\snicoper\source\virtual-racing-manager\virtual-racing-manager-api\bruno\files\avatar.png
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

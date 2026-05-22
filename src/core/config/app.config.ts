@@ -28,6 +28,8 @@ export const AppConfig = {
     from: process.env.MAIL_FROM,
   },
 
+  uploadsPath: process.env.UPLOADS_PATH ?? 'C:\\vrm-data\\uploads',
+
   front: {
     url: process.env.FRONT_URL,
     verifyEmailUri: process.env.VERIFY_EMAIL_URI,

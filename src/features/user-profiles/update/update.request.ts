@@ -22,7 +22,4 @@ export class UpdateRequest {
 
   @IsOptionalField()
   bio?: string;
-
-  @IsOptionalField()
-  avatarUrl?: string;
 }

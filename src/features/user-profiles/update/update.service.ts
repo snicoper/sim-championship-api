@@ -24,7 +24,7 @@ export class UpdateService {
       lastName: request.lastName ?? userProfile?.lastName ?? null,
       country: request.country ?? userProfile?.country ?? null,
       bio: request.bio ?? userProfile?.bio ?? null,
-      avatarUrl: request.avatarUrl ?? userProfile?.avatarUrl ?? null,
+      avatarUrl: userProfile?.avatarUrl ?? null,
       createdAt: userProfile?.createdAt ?? new Date(),
       updatedAt: new Date(),
     };

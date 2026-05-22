@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { AppConfig } from '../config/app.config';
-import { ProblemDetailsResponse } from '../interfaces/problem-details-response.interface';
+import { ProblemDetailsResponse } from '../http/problem-details-response.interface';
 
 @Catch()
 export class GlobalExceptionFilter implements ExceptionFilter {

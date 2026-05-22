@@ -3,7 +3,7 @@ import {
   ValidationPipe,
   type ValidationError,
 } from '@nestjs/common';
-import { type ProblemDetailsResponse } from '../interfaces/problem-details-response.interface';
+import { type ProblemDetailsResponse } from '../http/problem-details-response.interface';
 
 export function createValidationPipe(): ValidationPipe {
   return new ValidationPipe({

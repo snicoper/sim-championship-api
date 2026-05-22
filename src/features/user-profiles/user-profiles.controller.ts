@@ -37,7 +37,7 @@ export class UserProfilesController {
 
   @Get('slug-availability/:slug')
   @HttpCode(HttpStatus.OK)
-  async availabilitySlug(
+  async slugAvailability(
     @Param() request: SlugAvailabilityRequest,
   ): Promise<SlugAvailabilityResponse> {
     return this.slugAvailabilityService.handle(request.slug);

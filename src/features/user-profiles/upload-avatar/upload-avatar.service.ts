@@ -58,18 +58,24 @@ export class UploadAvatarService {
       throw new NotFoundException('User profile not found');
     }
 
-    if (profile.avatarUrl) {
-      // Luego podemos guardar avatarKey en DB para borrar bien.
-      // De momento no intentaría deducir key desde URL.
-    }
+    const oldAvatarKey = profile.avatarUrl
+      ? this.getStorageKeyFromUrl(profile.avatarUrl)
+      : null;
 
     profile.avatarUrl = storedFile.url;
-
     await this.userProfileRepository.upsertByUserId(userId, profile);
 
     const result: UploadAvatarResponse = {
       avatarUrl: profile.avatarUrl,
     };
+
+    try {
+      if (oldAvatarKey) {
+        await this.fileStorage.delete(oldAvatarKey);
+      }
+    } catch {
+      // ignore
+    }
 
     return result;
   }
@@ -82,5 +88,9 @@ export class UploadAvatarService {
     };
 
     return mimeTypeExtensions[mimeType];
+  }
+
+  private getStorageKeyFromUrl(url: string): string {
+    return url.replace('/uploads/', '');
   }
 }
